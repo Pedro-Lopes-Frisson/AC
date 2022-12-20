@@ -6,11 +6,11 @@ conf t
 
 
 interface f0/1 ! connection to DC.P2
-ip address 192.168.1.145 255.255.255.240
+ip address 10.0.0.65 255.255.255.192
 no shut
 
 interface f1/0 ! connectiion to DC.P1
-ip address 192.168.1.129 255.255.255.240
+ip address 10.0.0.1 255.255.255.192
 no shut
 
 interface f6/1 ! Connection to the internet
@@ -45,15 +45,14 @@ no shut
 ip ospf 1 area 0
 
 int f0/0 ! connection to DC.A1
-ip address 192.168.1.97 255.255.255.240
+ip address 10.0.1.129 255.255.255.192
 no shut
 
 int f0/1 ! connection to DC.A2
-ip address 192.168.1.113 255.255.255.240
+ip address 192.168.1.193 255.255.255.192
 no shut
 
 
-!interface Lo 0 ! bgp connections
 ```
 
 
@@ -63,7 +62,7 @@ no shut
 conf t
 
 int f1/1 ! connection to DC.C1
-ip address 192.168.1.81  255.255.255.240
+ip address 10.0.1.1  255.255.255.192
 no shut
 
 int f1/0 ! connection to Aveiro
@@ -81,8 +80,6 @@ ip address 10.0.1.193  255.255.255.240
 ip ospf 1 area 0
 no shut
 
-
-interface Lo 0 ! bgp connections
 ```
 
 ## Router Lisboa
@@ -91,7 +88,7 @@ conf t
 
 
 int f0/0 ! connection to DC.L1
-ip address 192.168.1.65  255.255.255.240
+ip address 10.0.1.65  255.255.255.192
 no shut
 
 int f0/1 ! connection to Coimbra
@@ -102,7 +99,6 @@ no shut
 int f6/1  ! connection to internet
 no shut
 
-interface Lo 0 ! bgp connections
 ```
 
 
@@ -123,27 +119,36 @@ interface Lo 0 ! bgp connections
 ```
 conf t
 router bgp 43100
-router-id 192.168.1.130
-neighbor 192.168.1.168 remote-as 43100
-neighbor 192.168.1.168 update-source Lo0
+bgp router-id 10.10.10.10
+neighbor 10.0.1.232 remote-as 43100 ! C1
+neighbor 10.0.1.232 update-source Lo 0
 
-neighbor 192.168.1.169 remote-as 43100
-neighbor 192.168.1.169 update-source Lo0
+neighbor 10.0.1.228 remote-as 43100 ! A2
+neighbor 10.0.1.228 update-source Lo 0
+
+neighbor 10.0.1.208 remote-as 43100 ! P1
+neighbor 10.0.1.208 update-source Lo 0
 
 address-family vpnv4
-neighbor 192.168.1.168 activate
-neighbor 192.168.1.168 send-community both
 
-address-family vpnv4
-neighbor 192.168.1.169 activate
-neighbor 192.168.1.169 send-community both
+neighbor 10.0.1.232 activate
+neighbor 10.0.1.232 send-community both
+
+neighbor 10.0.1.228 activate
+neighbor 10.0.1.228 send-community both
+
+neighbor 10.0.1.208 activate
+neighbor 10.0.1.208 send-community both
+
 
 interface f0/1
-ip address 192.168.1.130 255.255.255.250
+ip address 10.0.0.2 255.255.255.192
 no shut
 
 interface f0/0
-ip address
+ip vrf fowarding VPN-1
+ip address 10.0.2.1 255.255.255.0
+
 no shut
 
 
