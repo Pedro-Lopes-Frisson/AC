@@ -106,6 +106,10 @@ no shut
 ## VyOS DC.L1
 
 ```
+sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
+reboot
+
+
 
 ```
 
@@ -113,6 +117,8 @@ no shut
 ## VyOS DC.P2
 
 ```
+sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
+reboot
 
 ```
 ## Router DC.P1
@@ -126,9 +132,6 @@ neighbor 10.0.1.232 update-source Lo 0
 neighbor 10.0.1.228 remote-as 43100 ! A2
 neighbor 10.0.1.228 update-source Lo 0
 
-neighbor 10.0.1.208 remote-as 43100 ! P1
-neighbor 10.0.1.208 update-source Lo 0
-
 address-family vpnv4
 
 neighbor 10.0.1.232 activate
@@ -137,8 +140,22 @@ neighbor 10.0.1.232 send-community both
 neighbor 10.0.1.228 activate
 neighbor 10.0.1.228 send-community both
 
-neighbor 10.0.1.208 activate
-neighbor 10.0.1.208 send-community both
+exit
+
+ip vrf VPN-1
+rd 200:1
+route-target import 200:1
+route-target export 200:1
+
+ip vrf VPN-2
+rd 200:2
+route-target import 200:2
+route-target export 200:2
+
+ip vrf VPN-3
+rd 200:3
+route-target import 200:3
+route-target export 200:3
 
 
 interface f0/1
@@ -146,9 +163,9 @@ ip address 10.0.0.2 255.255.255.192
 no shut
 
 interface f0/0
+ip address 10.0.2.1 255.255.255.0
 ip vrf fowarding VPN-1
 ip address 10.0.2.1 255.255.255.0
-
 no shut
 
 
@@ -157,13 +174,110 @@ no shut
 # Aveiro DC
 ## VyOS DC.AC1
 ```
+sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
+reboot
+
 ```
+
 ## Router DC.A2
 ```
+conf t
+router bgp 43100
+bgp router-id 10.10.10.11
+neighbor 10.0.1.232 remote-as 43100 ! C1
+neighbor 10.0.1.232 update-source Lo 0
+
+
+neighbor 10.0.1.208 remote-as 43100 ! P1
+neighbor 10.0.1.208 update-source Lo 0
+
+address-family vpnv4
+
+neighbor 10.0.1.232 activate
+neighbor 10.0.1.232 send-community both
+
+neighbor 10.0.1.208 activate
+neighbor 10.0.1.208 send-community both
+exit
+
+ip vrf VPN-1
+rd 200:1
+route-target import 200:1
+route-target export 200:1
+
+ip vrf VPN-2
+rd 200:2
+route-target import 200:2
+route-target export 200:2
+
+ip vrf VPN-3
+rd 200:3
+route-target import 200:3
+route-target export 200:3
+
+
+interface f0/1
+ip address 10.0.0.193 255.255.255.192
+no shut
+
+interface f0/0
+ip address 10.0.3.1 255.255.255.0
+ip vrf fowarding VPN-3
+ip address 10.0.2.1 255.255.255.0
+no shut
+
+
+
 ```
 
 # Coimbra DC
 
 ## Router DC.C1
 ```
+conf t
+router bgp 43100
+bgp router-id 10.10.10.11
+neighbor 10.0.1.228 remote-as 43100 ! A2
+neighbor 10.0.1.228 update-source Lo 0
+
+
+neighbor 10.0.1.208 remote-as 43100 ! P1
+neighbor 10.0.1.208 update-source Lo 0
+
+address-family vpnv4
+
+neighbor 10.0.1.228 activate
+neighbor 10.0.1.228 send-community both
+
+neighbor 10.0.1.208 activate
+neighbor 10.0.1.208 send-community both
+exit
+
+ip vrf VPN-1
+rd 200:1
+route-target import 200:1
+route-target export 200:1
+
+ip vrf VPN-2
+rd 200:2
+route-target import 200:2
+route-target export 200:2
+
+ip vrf VPN-3
+rd 200:3
+route-target import 200:3
+route-target export 200:3
+
+
+interface f0/1
+ip address 10.0.1.1 255.255.255.192
+no shut
+
+interface f0/0
+ip address 10.0.3.1 255.255.255.0
+ip vrf fowarding VPN-3
+ip address 10.0.3.1 255.255.255.0
+no shut
+
+
 ```
