@@ -147,17 +147,6 @@ rd 200:1
 route-target import 200:1
 route-target export 200:1
 
-ip vrf VPN-2
-rd 200:2
-route-target import 200:2
-route-target export 200:2
-
-ip vrf VPN-3
-rd 200:3
-route-target import 200:3
-route-target export 200:3
-
-
 interface f0/1
 ip address 10.0.0.2 255.255.255.192
 no shut
@@ -208,15 +197,6 @@ rd 200:1
 route-target import 200:1
 route-target export 200:1
 
-ip vrf VPN-2
-rd 200:2
-route-target import 200:2
-route-target export 200:2
-
-ip vrf VPN-3
-rd 200:3
-route-target import 200:3
-route-target export 200:3
 
 
 interface f0/1
@@ -225,7 +205,7 @@ no shut
 
 interface f0/0
 ip address 10.0.3.1 255.255.255.0
-ip vrf fowarding VPN-3
+ip vrf fowarding VPN-1
 ip address 10.0.2.1 255.255.255.0
 no shut
 
@@ -261,24 +241,13 @@ rd 200:1
 route-target import 200:1
 route-target export 200:1
 
-ip vrf VPN-2
-rd 200:2
-route-target import 200:2
-route-target export 200:2
-
-ip vrf VPN-3
-rd 200:3
-route-target import 200:3
-route-target export 200:3
-
-
 interface f0/1
 ip address 10.0.1.1 255.255.255.192
 no shut
 
 interface f0/0
 ip address 10.0.3.1 255.255.255.0
-ip vrf fowarding VPN-3
+ip vrf fowarding VPN-1
 ip address 10.0.3.1 255.255.255.0
 no shut
 
