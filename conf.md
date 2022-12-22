@@ -40,7 +40,7 @@ no shut
 ip ospf 1 area 0 ! enable ospf inside PN
 
 int f1/0 ! connection to Coimbra
-ip address 10.0.1.197 255.255.255.240
+ip address 10.0.1.198 255.255.255.252
 no shut
 ip ospf 1 area 0
 
@@ -65,18 +65,18 @@ int f1/1 ! connection to DC.C1
 ip address 10.0.1.1  255.255.255.192
 no shut
 
-int f1/0 ! connection to Aveiro
-ip address 10.0.1.198  255.255.255.252
+nt f1/0 ! connection to Aveiro
+ip address 10.0.1.197  255.255.255.252
 ip ospf 1 area 0
 no shut
 
 int f0/0 ! connection to Porto
-ip address 10.0.1.206  255.255.255.240
+ip address 10.0.1.206  255.255.255.252
 ip ospf 1 area 0
 no shut
 
 int f0/1 ! connection to Lisboa
-ip address 10.0.1.193  255.255.255.240
+ip address 10.0.1.193  255.255.255.252
 ip ospf 1 area 0
 no shut
 
@@ -92,7 +92,7 @@ ip address 10.0.1.65  255.255.255.192
 no shut
 
 int f0/1 ! connection to Coimbra
-ip address 10.0.1.194  255.255.255.240
+ip address 10.0.1.194  255.255.255.252
 ip ospf 1 area 0
 no shut
 
@@ -167,6 +167,9 @@ ip address 10.0.2.1 255.255.255.0
 ip vrf fowarding VPN-1
 ip address 10.0.2.1 255.255.255.0
 no shut
+
+int lo0
+
 
 
 
