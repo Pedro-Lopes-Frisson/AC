@@ -234,8 +234,7 @@ no shut
 interface f0/0
 ip address 10.0.3.1 255.255.255.0
 ip vrf forwarding VPN-1
-mpls ip
-ip address 10.0.2.1 255.255.255.0
+ip address 10.0.3.1 255.255.255.0
 no shut
 
 int lo0
@@ -280,9 +279,9 @@ ip ospf 1 area 0
 no shut
 
 interface f0/0
-ip address 10.0.3.1 255.255.255.0
+ip address 10.0.1.1 255.255.255.0
 ip vrf forwarding VPN-1
-ip address 10.0.3.1 255.255.255.0
+ip address 10.0.1.1 255.255.255.0
 no shut
 
 int lo0
