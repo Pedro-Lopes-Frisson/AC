@@ -4,15 +4,18 @@
 ```
 conf t
 
+mpls ip
 
 interface f0/1 ! connection to DC.P2
 ip address 10.0.0.65 255.255.255.192
 ip ospf 1 area 0
+mpls ip
 no shut
 
 interface f1/0 ! connectiion to DC.P1
 ip address 10.0.0.1 255.255.255.192
 ip ospf 1 area 0
+mpls ip
 no shut
 
 interface f6/1 ! Connection to the internet
@@ -20,11 +23,13 @@ no shut
 
 interface f1/1 ! connection to Aveiro
 ip address 10.0.1.201 255.255.255.252
+mpls ip
 ip ospf 1 area 0 ! enable ospf inside PN
 no shut
 
 interface f0/0 ! connection to Coimbra
 ip address 10.0.1.205 255.255.255.252
+mpls ip
 ip ospf 1 area 0 ! enable ospf inside PN
 no shut
 
@@ -35,24 +40,29 @@ no shut
 ## Router Aveiro
 ```
 conf t
+mpls ip
 
 int f1/1 ! connection to Porto
 ip address 10.0.1.202 255.255.255.252
+mpls ip
 no shut
 ip ospf 1 area 0 ! enable ospf inside PN
 
 int f1/0 ! connection to Coimbra
 ip address 10.0.1.198 255.255.255.252
+mpls ip
 no shut
 ip ospf 1 area 0
 
 int f0/0 ! connection to DC.A1
 ip address 10.0.1.129 255.255.255.252
 ip ospf 1 area 0
+mpls ip
 no shut
 
 int f0/1 ! connection to DC.A2
 ip address 10.0.0.194 255.255.255.192
+mpls ip
 ip ospf 1 area 0
 no shut
 
@@ -68,20 +78,24 @@ conf t
 int f1/1 ! connection to DC.C1
 ip address 10.0.1.1  255.255.255.192
 ip ospf 1 area 0
+mpls ip
 no shut
 
 int f1/0 ! connection to Aveiro
 ip address 10.0.1.197  255.255.255.252
 ip ospf 1 area 0
+mpls ip
 no shut
 
 int f0/0 ! connection to Porto
 ip address 10.0.1.206  255.255.255.252
 ip ospf 1 area 0
+mpls ip
 no shut
 
 int f0/1 ! connection to Lisboa
 ip address 10.0.1.193  255.255.255.252
+mpls ip
 ip ospf 1 area 0
 no shut
 
@@ -94,12 +108,14 @@ conf t
 
 int f0/0 ! connection to DC.L1
 ip address 10.0.1.65  255.255.255.192
+mpls ip
 ip ospf 1 area 0
 no shut
 
 int f0/1 ! connection to Coimbra
 ip address 10.0.1.194  255.255.255.252
 ip ospf 1 area 0
+mpls ip
 no shut
 
 int f6/1  ! connection to internet
@@ -156,6 +172,7 @@ route-target export 200:1
 interface f0/1
 ip address 10.0.0.2 255.255.255.192
 ip ospf 1 area 0
+mpls ip
 no shut
 
 interface f0/0
@@ -211,11 +228,13 @@ route-target export 200:1
 interface f0/1
 ip address 10.0.0.193 255.255.255.192
 ip ospf 1 area 0
+mpls ip
 no shut
 
 interface f0/0
 ip address 10.0.3.1 255.255.255.0
 ip vrf forwarding VPN-1
+mpls ip
 ip address 10.0.2.1 255.255.255.0
 no shut
 
@@ -256,6 +275,7 @@ route-target export 200:1
 
 interface f0/1
 ip address 10.0.1.2 255.255.255.192
+mpls ip
 ip ospf 1 area 0
 no shut
 
