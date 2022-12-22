@@ -47,12 +47,12 @@ no shut
 ip ospf 1 area 0
 
 int f0/0 ! connection to DC.A1
-ip address 10.0.1.129 255.255.255.192
+ip address 10.0.1.129 255.255.255.252
 ip ospf 1 area 0
 no shut
 
 int f0/1 ! connection to DC.A2
-ip address 10.0.1.194 255.255.255.192
+ip address 10.0.0.194 255.255.255.192
 ip ospf 1 area 0
 no shut
 
