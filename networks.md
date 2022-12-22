@@ -9,6 +9,7 @@
 | Aveiro.A2  | 10.0.0.0/23   |
 | Porto      | 10.0.0.0/23   |
 
+## Datacenters and Lo's
 
 | Datacenter     |  Subnet Address/mask  |  Host Address Range     |  Broadcast Address | 
 | Porto.P1       |  10.0.0.0     /26     | 10.0.0.1 - 10.0.0.62    |      10.0.0.63     | 
