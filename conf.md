@@ -7,10 +7,12 @@ conf t
 
 interface f0/1 ! connection to DC.P2
 ip address 10.0.0.65 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 interface f1/0 ! connectiion to DC.P1
 ip address 10.0.0.1 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 interface f6/1 ! Connection to the internet
@@ -46,10 +48,12 @@ ip ospf 1 area 0
 
 int f0/0 ! connection to DC.A1
 ip address 10.0.1.129 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 int f0/1 ! connection to DC.A2
-ip address 192.168.1.193 255.255.255.192
+ip address 10.0.1.194 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 
@@ -63,9 +67,10 @@ conf t
 
 int f1/1 ! connection to DC.C1
 ip address 10.0.1.1  255.255.255.192
+ip ospf 1 area 0
 no shut
 
-nt f1/0 ! connection to Aveiro
+int f1/0 ! connection to Aveiro
 ip address 10.0.1.197  255.255.255.252
 ip ospf 1 area 0
 no shut
@@ -89,6 +94,7 @@ conf t
 
 int f0/0 ! connection to DC.L1
 ip address 10.0.1.65  255.255.255.192
+ip ospf 1 area 0
 no shut
 
 int f0/1 ! connection to Coimbra
@@ -127,10 +133,10 @@ conf t
 router bgp 43100
 bgp router-id 10.10.10.10
 neighbor 10.0.1.232 remote-as 43100 ! C1
-neighbor 10.0.1.232 update-source Lo 0
+neighbor 10.0.1.232 update-source Lo0
 
 neighbor 10.0.1.228 remote-as 43100 ! A2
-neighbor 10.0.1.228 update-source Lo 0
+neighbor 10.0.1.228 update-source Lo0
 
 address-family vpnv4
 
@@ -149,15 +155,18 @@ route-target export 200:1
 
 interface f0/1
 ip address 10.0.0.2 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 interface f0/0
 ip address 10.0.2.1 255.255.255.0
-ip vrf fowarding VPN-1
+ip vrf forwarding VPN-1
 ip address 10.0.2.1 255.255.255.0
 no shut
 
 int lo0
+ip address 10.0.1.208 255.255.255.255
+ip ospf 1 area 0
 
 
 
@@ -175,7 +184,7 @@ reboot
 ```
 conf t
 router bgp 43100
-bgp router-id 10.10.10.11
+bgp router-id 10.10.10.12
 neighbor 10.0.1.232 remote-as 43100 ! C1
 neighbor 10.0.1.232 update-source Lo 0
 
@@ -201,14 +210,18 @@ route-target export 200:1
 
 interface f0/1
 ip address 10.0.0.193 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 interface f0/0
 ip address 10.0.3.1 255.255.255.0
-ip vrf fowarding VPN-1
+ip vrf forwarding VPN-1
 ip address 10.0.2.1 255.255.255.0
 no shut
 
+int lo0
+ip address 10.0.1.228 255.255.255.255
+ip ospf 1 area 0
 
 
 ```
@@ -219,7 +232,7 @@ no shut
 ```
 conf t
 router bgp 43100
-bgp router-id 10.10.10.11
+bgp router-id 10.10.10.14
 neighbor 10.0.1.228 remote-as 43100 ! A2
 neighbor 10.0.1.228 update-source Lo 0
 
@@ -242,14 +255,18 @@ route-target import 200:1
 route-target export 200:1
 
 interface f0/1
-ip address 10.0.1.1 255.255.255.192
+ip address 10.0.1.2 255.255.255.192
+ip ospf 1 area 0
 no shut
 
 interface f0/0
 ip address 10.0.3.1 255.255.255.0
-ip vrf fowarding VPN-1
+ip vrf forwarding VPN-1
 ip address 10.0.3.1 255.255.255.0
 no shut
 
+int lo0
+ip address 10.0.1.232 255.255.255.255
+ip ospf 1 area 0
 
 ```
