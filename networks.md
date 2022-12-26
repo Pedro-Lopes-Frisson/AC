@@ -11,7 +11,8 @@
 
 ## Datacenters and Lo's
 
-| Datacenter     |  Subnet Address/mask  |  Host Address Range     |  Broadcast Address | 
+| Datacenter     |  Subnet Address/mask  |  Host Address Range     |  Broadcast Address |
+|:--:|:--:|:--:|:--:|
 | Porto.P1       |  10.0.0.0     /26     | 10.0.0.1 - 10.0.0.62    |      10.0.0.63     | 
 | Porto.P2       |  10.0.0.64    /26     | 10.0.0.65 - 10.0.0.126  |      10.0.0.127    | 
 | Aveiro A1      |  10.0.0.128   /26     | 10.0.0.129 - 10.0.0.190 |      10.0.0.191    | 
