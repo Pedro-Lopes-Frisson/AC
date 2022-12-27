@@ -3,6 +3,7 @@
 ## Datacenters
 
 | Datacenter | Network       |
+|:--:|:--|
 | Porto.P1      | 10.0.0.0/26   |
 | Porto.P2     | 10.0.0.64/26  |
 | Aveiro.A1     | 10.0.0.128/64 |
