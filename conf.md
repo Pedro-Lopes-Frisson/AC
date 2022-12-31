@@ -12,7 +12,7 @@ ip cef
 interface f0/1 ! connection to DC.P2
 ip address 10.0.0.65 255.255.255.192
 ip ospf 1 area 0
-mpls ip
+mpls traffic-eng tunnels
 no shut
 
 interface f1/0 ! connectiion to DC.P1
@@ -62,9 +62,9 @@ no shut
 ip ospf 1 area 0
 
 int f0/0 ! connection to DC.A1
-ip address 10.0.1.129 255.255.255.252
+ip address 10.0.1.129 255.255.255.192
 ip ospf 1 area 0
-mpls ip
+mpls traffic-eng tunnels
 no shut
 
 int f0/1 ! connection to DC.A2
@@ -130,7 +130,7 @@ no shut
 int f0/1 ! connection to Coimbra
 ip address 10.0.1.194  255.255.255.252
 ip ospf 1 area 0
-mpls ip
+mpls traffic-eng tunnels
 no shut
 
 int f6/1  ! connection to internet
@@ -145,9 +145,6 @@ no shut
 ```
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
-
-
-
 ```
 
 # Porto DC
@@ -156,6 +153,38 @@ reboot
 ```
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
+
+
+configure
+set interfaces ethernet eth0 address 10.0.0.66/26
+set protocols ospf area 0 network 10.0.0.64/26
+commit
+save
+
+
+set interfaces ethernet eth1 vif 2
+set interfaces ethernet eth1 vif 3
+commit
+save
+
+set interfaces vxlan vxlan102 vni 101
+set interfaces vxlan vxlan102 mtu 1500
+set interface vxlan vxlan102 remote 10.0.1.130
+
+set interfaces vxlan vxlan103 vni 102
+set interfaces vxlan vxlan103 mtu 1500
+set interface vxlan vxlan103 remote 10.0.1.130
+commit
+save
+
+set interfaces bridge br102 member interface 'eth1.2'
+set interfaces bridge br102 member interface 'vxlan102'
+set interfaces bridge br103 member interface 'eth1.3'
+set interfaces bridge br103 member interface 'vxlan103'
+commit
+
+
+
 
 ```
 ## Router DC.P1
@@ -216,6 +245,35 @@ ip ospf 1 area 0
 ```
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
+
+configure
+set interfaces ethernet eth0 address 10.0.1.130/26
+set protocols ospf area 0 network 10.0.1.128/26
+commit
+save
+
+
+set interfaces ethernet eth1 vif 2
+set interfaces ethernet eth1 vif 3
+commit
+save
+
+set interfaces vxlan vxlan102 vni 101
+set interfaces vxlan vxlan102 mtu 1500
+set interface vxlan vxlan102 remote 10.0.0.66
+
+set interfaces vxlan vxlan103 vni 102
+set interfaces vxlan vxlan103 mtu 1500
+set interface vxlan vxlan103 remote 10.0.0.66
+commit
+save
+
+set interfaces bridge br102 member interface 'eth1.2'
+set interfaces bridge br102 member interface 'vxlan102'
+set interfaces bridge br103 member interface 'eth1.3'
+set interfaces bridge br103 member interface 'vxlan103'
+commit
+save
 
 ```
 
