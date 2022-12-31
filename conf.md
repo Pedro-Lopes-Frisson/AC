@@ -146,6 +146,56 @@ no shut
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
 
+configure
+set interfaces ethernet eth0 address 10.0.1.66/26
+set interfaces dummy dum0 address 10.0.1.208/32
+set protocols ospf area 0 network 10.0.1.64/26
+set protocols ospf area 0 network 10.0.1.208/32
+set system host-name DCL1
+
+set interfaces ethernet eth2 vif 20
+set interfaces ethernet eth2 vif 30
+
+set protocols bgp system-as 102
+
+## codigo abaixo tem de ser testado
+set protocols bgp address-family l2vpn-evpn advertise-all-vni
+set protocols bgp address-family l2vpn-evpn vni 101 ...
+set protocols bgp 65151 address-family l2vpn-evpn vni 101 rd ...
+set protocols bgp 65151 address-family l2vpn-evpn vni 101 route-target ...
+##
+
+set protocols bgp parameters router-id 10.0.1.208
+set protocols bgp neighbor 10.0.1.211 peer-group evpn
+set protocols bgp neighbor 10.0.1.212 peer-group evpn
+set protocols bgp peer-group evpn update-source dum0
+set protocols bgp peer-group evpn remote-as 102
+set protocols bgp peer-group evpn address-family l2vpn-evpn nexthop-self
+set protocols bgp peer-group evpn address-family l2vpn-evpn route-reflector-client
+
+set interfaces vxlan vxlan101 source-address 10.0.1.208
+set interfaces vxlan vxlan101 vni 101
+set interfaces vxlan vxlan101 mtu 1500
+
+set interfaces vxlan vxlan202 vni 202
+set interfaces vxlan vxlan202 mtu 1500
+set interfaces vxlan vxlan202 remote 10.0.0.66
+set interfaces vxlan vxlan203 vni 203
+set interfaces vxlan vxlan203 mtu 1500
+set interfaces vxlan vxlan203 remote 10.0.0.66
+
+set interfaces bridge br101 address 10.2.1.1/22
+set interfaces bridge br101 description 'client x1'
+set interfaces bridge br101 member interface eth1
+set interfaces bridge br101 member interface vxlan101
+
+
+set interfaces bridge br202 member interface eth2.20
+set interfaces bridge br202 member interface vxlan202
+set interfaces bridge br203 member interface eth2.30
+set interfaces bridge br203 member interface vxlan203
+commit
+save
 
 
 ```
@@ -156,6 +206,57 @@ reboot
 ```
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
+
+configure
+set interfaces ethernet eth0 address 10.0.0.66/26
+set interfaces dummy dum0 address 10.0.1.211/32
+set protocols ospf area 0 network 10.0.0.64/26
+set protocols ospf area 0 network 10.0.1.211/32
+set system host-name DCP2
+
+set interfaces ethernet eth2 vif 20
+set interfaces ethernet eth2 vif 30
+
+set protocols bgp system-as 102
+
+## codigo abaixo tem de ser testado
+set protocols bgp address-family l2vpn-evpn advertise-all-vni
+set protocols bgp address-family l2vpn-evpn vni 101 ...
+set protocols bgp 65151 address-family l2vpn-evpn vni 101 rd ...
+set protocols bgp 65151 address-family l2vpn-evpn vni 101 route-target ...
+##
+
+set protocols bgp parameters router-id 10.0.1.211
+set protocols bgp neighbor 10.0.1.208 peer-group evpn
+set protocols bgp peer-group evpn update-source dum0
+set protocols bgp peer-group evpn remote-as 102
+set protocols bgp peer-group evpn address-family l2vpn-evpn nexthop-self
+
+set interfaces vxlan vxlan101 source-address 10.0.1.211
+set interfaces vxlan vxlan101 vni 101
+set interfaces vxlan vxlan101 mtu 1500
+
+set interfaces vxlan vxlan202 vni 202
+set interfaces vxlan vxlan202 mtu 1500
+set interfaces vxlan vxlan202 remote 10.0.1.66
+set interfaces vxlan vxlan203 vni 203
+set interfaces vxlan vxlan203 mtu 1500
+set interfaces vxlan vxlan203 remote 10.0.1.66
+
+set interfaces bridge br101 address 10.2.2.1/22
+set interfaces bridge br101 description 'client x2'
+set interfaces bridge br101 member interface eth1
+set interfaces bridge br101 member interface vxlan101
+
+
+set interfaces bridge br202 member interface eth2.20
+set interfaces bridge br202 member interface vxlan202
+set interfaces bridge br203 member interface eth2.30
+set interfaces bridge br203 member interface vxlan203
+commit
+save
+
+
 
 ```
 ## Router DC.P1
@@ -216,6 +317,41 @@ ip ospf 1 area 0
 ```
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
+
+configure
+set interfaces ethernet eth0 address 10.0.0.130/26
+set interfaces dummy dum0 address 10.0.1.212/32
+set protocols ospf area 0 network 10.0.0.128/26
+set protocols ospf area 0 network 10.0.1.212/32
+set system host-name DCA1
+
+set protocols bgp system-as 102
+
+## codigo abaixo tem de ser testado
+set protocols bgp address-family l2vpn-evpn advertise-all-vni
+set protocols bgp address-family l2vpn-evpn vni 101 ...
+set protocols bgp 65151 address-family l2vpn-evpn vni 101 rd ...
+set protocols bgp 65151 address-family l2vpn-evpn vni 101 route-target ...
+## 
+
+set protocols bgp parameters router-id 10.0.1.212
+set protocols bgp neighbor 10.0.1.208 peer-group evpn
+set protocols bgp peer-group evpn update-source dum0
+set protocols bgp peer-group evpn remote-as 102
+set protocols bgp peer-group evpn address-family l2vpn-evpn nexthop-self
+
+set interfaces vxlan vxlan101 source-address 10.0.1.212
+set interfaces vxlan vxlan101 vni 101
+set interfaces vxlan vxlan101 mtu 1500
+
+set interfaces bridge br101 address 10.2.3.1/22
+set interfaces bridge br101 description 'client x3'
+set interfaces bridge br101 member interface eth1
+set interfaces bridge br101 member interface vxlan101
+
+commit
+save
+
 
 ```
 
