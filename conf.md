@@ -3,40 +3,76 @@
 
 ```
 conf t
-router ospf 1
-router-id 1.1.1.1
-
-mpls ip
 ip cef
-
-interface f0/1 ! connection to DC.P2
-ip address 10.0.0.65 255.255.255.192
-ip ospf 1 area 0
+!
+!
 mpls traffic-eng tunnels
-no shut
-
-interface f1/0 ! connectiion to DC.P1
-ip address 10.0.0.1 255.255.255.192
-ip ospf 1 area 0
-mpls ip
-no shut
-
-interface f6/1 ! Connection to the internet
-no shut
-
-interface f1/1 ! connection to Aveiro
-ip address 10.0.1.201 255.255.255.252
-mpls ip
-ip ospf 1 area 0 ! enable ospf inside PN
-no shut
-
-interface f0/0 ! connection to Coimbra
-ip address 10.0.1.205 255.255.255.252
-mpls ip
-ip ospf 1 area 0 ! enable ospf inside PN
-no shut
-
-!interface lo0 ! bgp connections
+!
+interface Loopback0
+ ip address 10.0.1.236 255.255.255.255
+ ip ospf 1 area 0
+!
+interface Tunnel1
+ ip unnumbered Loopback0
+ tunnel mode mpls traffic-eng
+ tunnel destination 10.0.1.237
+ tunnel mpls traffic-eng priority 7 7
+ tunnel mpls traffic-eng bandwidth 150
+ tunnel mpls traffic-eng path-option 1 explicit name path1
+!
+interface FastEthernet0/0
+ ip address 10.0.1.205 255.255.255.252
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 5000 5000
+!
+interface FastEthernet0/1
+ ip address 10.0.0.65 255.255.255.192
+ ip policy route-map L101
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+ mpls traffic-eng tunnels
+!
+interface FastEthernet1/0
+ ip address 10.0.0.1 255.255.255.192
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+!
+interface FastEthernet1/1
+ ip address 10.0.1.201 255.255.255.252
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+!
+router ospf 1
+ router-id 1.1.1.1
+ mpls traffic-eng router-id Loopback0
+ mpls traffic-eng area 0
+!
+!
+ip explicit-path name path1 enable
+ next-address 10.0.1.206
+ next-address 10.0.1.194
+!
+ip access-list extended L101
+ permit udp any eq 8472 any eq 8472
+!
+!
+route-map VXLAN-UDP permit 10
+ match ip address L101
+ set interface Tunnel1
+!
+!
+!
+end
 ```
 
 
@@ -57,6 +93,7 @@ ip ospf 1 area 0 ! enable ospf inside PN
 
 int f1/0 ! connection to Coimbra
 ip address 10.0.1.198 255.255.255.252
+!ip rsvp bandwidth 5000 5000
 mpls ip
 no shut
 ip ospf 1 area 0
@@ -64,7 +101,7 @@ ip ospf 1 area 0
 int f0/0 ! connection to DC.A1
 ip address 10.0.1.129 255.255.255.192
 ip ospf 1 area 0
-mpls traffic-eng tunnels
+mpls ip
 no shut
 
 int f0/1 ! connection to DC.A2
@@ -81,61 +118,141 @@ no shut
 ## Router Coimbra
 ```
 conf t
-router ospf 1
-router-id 1.1.1.3
-mpls ip 
 ip cef
+!
+!
+mpls traffic-eng tunnels
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.0.1.253 255.255.255.255
+ ip ospf 1 area 0
+!
+interface FastEthernet0/0
+ ip address 10.0.1.206 255.255.255.252
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 5000 5000
+!
+interface FastEthernet0/1
+ ip address 10.0.1.193 255.255.255.252
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 5000 5000
+!
+interface FastEthernet1/0
+ ip address 10.0.1.197 255.255.255.252
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 5000 5000
+!
+interface FastEthernet1/1
+ ip address 10.0.1.1 255.255.255.192
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
 
-int f1/1 ! connection to DC.C1
-ip address 10.0.1.1  255.255.255.192
-ip ospf 1 area 0
-mpls ip
-no shut
-
-int f1/0 ! connection to Aveiro
-ip address 10.0.1.197  255.255.255.252
-ip ospf 1 area 0
-mpls ip
-no shut
-
-int f0/0 ! connection to Porto
-ip address 10.0.1.206  255.255.255.252
-ip ospf 1 area 0
-mpls ip
-no shut
-
-int f0/1 ! connection to Lisboa
-ip address 10.0.1.193  255.255.255.252
-mpls ip
-ip ospf 1 area 0
-no shut
+router ospf 1
+ router-id 1.1.1.3
+ mpls traffic-eng router-id Loopback0
+ mpls traffic-eng area 0
+!
+!
+end
 
 ```
 
 ## Router Lisboa
 ```
-conf t
-mpls ip
-router ospf 1
-router-id 1.1.1.4
 ip cef
-
-
-int f0/0 ! connection to DC.L1
-ip address 10.0.1.65  255.255.255.192
-mpls ip
-ip ospf 1 area 0
-no shut
-
-int f0/1 ! connection to Coimbra
-ip address 10.0.1.194  255.255.255.252
-ip ospf 1 area 0
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+!
 mpls traffic-eng tunnels
-no shut
-
-int f6/1  ! connection to internet
-no shut
-
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.0.1.237 255.255.255.255
+ ip ospf 1 area 0
+!
+interface Tunnel1
+ ip unnumbered Loopback0
+ tunnel mode mpls traffic-eng
+ tunnel destination 10.0.1.236
+ tunnel mpls traffic-eng priority 7 7
+ tunnel mpls traffic-eng bandwidth 5000
+ tunnel mpls traffic-eng path-option 1 explicit name path1
+!
+interface FastEthernet0/0
+ ip address 10.0.1.65 255.255.255.192
+ ip policy route-map VXLAN-UDP
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.1.194 255.255.255.252
+ ip ospf 1 area 0
+ speed auto
+ duplex auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 5000 5000
+!
+!
+router ospf 1
+ router-id 1.1.1.4
+ mpls traffic-eng router-id Loopback0
+ mpls traffic-eng area 0
+!
+ip explicit-path name path1 enable
+ next-address 10.0.1.193
+ next-address 10.0.1.205
+!
+ip access-list extended L101
+!
+!
+route-map VXLAN-UDP permit 10
+ match ip address L101
+ set interface Tunnel1
+!
+!
+!
 ```
 
 
