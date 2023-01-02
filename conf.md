@@ -156,15 +156,8 @@ set system host-name DCL1
 set interfaces ethernet eth2 vif 20
 set interfaces ethernet eth2 vif 30
 
-set protocols bgp system-as 102
-
-## codigo abaixo tem de ser testado
+set protocols bgp system-as 43100
 set protocols bgp address-family l2vpn-evpn advertise-all-vni
-set protocols bgp address-family l2vpn-evpn vni 101 ...
-set protocols bgp 65151 address-family l2vpn-evpn vni 101 rd ...
-set protocols bgp 65151 address-family l2vpn-evpn vni 101 route-target ...
-##
-
 set protocols bgp parameters router-id 10.0.1.208
 set protocols bgp neighbor 10.0.1.211 peer-group evpn
 set protocols bgp neighbor 10.0.1.212 peer-group evpn
@@ -217,15 +210,8 @@ set system host-name DCP2
 set interfaces ethernet eth2 vif 20
 set interfaces ethernet eth2 vif 30
 
-set protocols bgp system-as 102
-
-## codigo abaixo tem de ser testado
+set protocols bgp system-as 43100
 set protocols bgp address-family l2vpn-evpn advertise-all-vni
-set protocols bgp address-family l2vpn-evpn vni 101 ...
-set protocols bgp 65151 address-family l2vpn-evpn vni 101 rd ...
-set protocols bgp 65151 address-family l2vpn-evpn vni 101 route-target ...
-##
-
 set protocols bgp parameters router-id 10.0.1.211
 set protocols bgp neighbor 10.0.1.208 peer-group evpn
 set protocols bgp peer-group evpn update-source dum0
@@ -325,15 +311,8 @@ set protocols ospf area 0 network 10.0.0.128/26
 set protocols ospf area 0 network 10.0.1.212/32
 set system host-name DCA1
 
-set protocols bgp system-as 102
-
-## codigo abaixo tem de ser testado
+set protocols bgp system-as 43100
 set protocols bgp address-family l2vpn-evpn advertise-all-vni
-set protocols bgp address-family l2vpn-evpn vni 101 ...
-set protocols bgp 65151 address-family l2vpn-evpn vni 101 rd ...
-set protocols bgp 65151 address-family l2vpn-evpn vni 101 route-target ...
-## 
-
 set protocols bgp parameters router-id 10.0.1.212
 set protocols bgp neighbor 10.0.1.208 peer-group evpn
 set protocols bgp peer-group evpn update-source dum0
