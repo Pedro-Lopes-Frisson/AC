@@ -264,19 +264,15 @@ sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
 configure
 
-set interfaces bridge br120 member interface eth2.2
 set interfaces bridge br120 member interface eth2.20
 set interfaces bridge br120 member interface vxlan102
 
-set interfaces bridge br130 member interface eth2.3
 set interfaces bridge br130 member interface eth2.30
 set interfaces bridge br130 member interface vxlan103
 
 set interfaces dummy dum0 address '10.0.1.208/32'
 set interfaces ethernet eth0 address '10.0.1.66/26'
 
-set interfaces ethernet eth2 vif 2
-set interfaces ethernet eth2 vif 3
 set interfaces ethernet eth2 vif 20
 set interfaces ethernet eth2 vif 30
 
@@ -307,7 +303,7 @@ set system host-name DCL1
 set interfaces vxlan vxlan101 source-address 10.0.1.208
 set interfaces vxlan vxlan101 vni 101
 set interfaces vxlan vxlan101 mtu 1500
-s
+
 set interfaces bridge br101 address 10.2.1.1/22
 set interfaces bridge br101 description 'client x1'
 set interfaces bridge br101 member interface eth1
@@ -329,19 +325,15 @@ sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
 
 configure
-set interfaces bridge br120 member interface eth2.2
 set interfaces bridge br120 member interface eth2.20
 set interfaces bridge br120 member interface vxlan102
-set interfaces bridge br130 member interface eth2.3
 set interfaces bridge br130 member interface eth2.30
 set interfaces bridge br130 member interface vxlan103
 set interfaces dummy dum0 address '10.0.1.211/32'
 set interfaces ethernet eth0 address '10.0.0.66/26'
-set interfaces ethernet eth2 vif 2
-set interfaces ethernet eth2 vif 3
 set interfaces ethernet eth2 vif 20
 set interfaces ethernet eth2 vif 30
-set interfaces loopback lo
+
 set interfaces vxlan vxlan120 mtu '1500'
 set interfaces vxlan vxlan120 remote '10.0.1.66'
 set interfaces vxlan vxlan120 vni '120'
