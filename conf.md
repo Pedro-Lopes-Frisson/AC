@@ -17,7 +17,7 @@ interface Tunnel1
  tunnel mode mpls traffic-eng
  tunnel destination 10.0.1.237
  tunnel mpls traffic-eng priority 7 7
- tunnel mpls traffic-eng bandwidth 150
+ tunnel mpls traffic-eng bandwidth 5000
  tunnel mpls traffic-eng path-option 1 explicit name path1
 !
 interface FastEthernet0/0
