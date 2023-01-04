@@ -245,6 +245,7 @@ ip explicit-path name path1 enable
  next-address 10.0.1.205
 !
 ip access-list extended L101
+ permit udp any eq 8472 any eq 8472
 !
 !
 route-map VXLAN-UDP permit 10
@@ -265,10 +266,10 @@ reboot
 configure
 
 set interfaces bridge br120 member interface eth2.20
-set interfaces bridge br120 member interface vxlan102
+set interfaces bridge br120 member interface vxlan120
 
 set interfaces bridge br130 member interface eth2.30
-set interfaces bridge br130 member interface vxlan103
+set interfaces bridge br130 member interface vxlan130
 
 set interfaces dummy dum0 address '10.0.1.208/32'
 set interfaces ethernet eth0 address '10.0.1.66/26'
@@ -292,24 +293,25 @@ set protocols bgp address-family l2vpn-evpn advertise-all-vni
 set protocols bgp parameters router-id 10.0.1.208
 set protocols bgp neighbor 10.0.1.211 peer-group evpn
 set protocols bgp neighbor 10.0.1.212 peer-group evpn
+set protocols bgp neighbor 10.0.1.211 update-source dum0
+set protocols bgp neighbor 10.0.1.212 update-source dum0
 set protocols bgp peer-group evpn update-source dum0
-set protocols bgp peer-group evpn remote-as 102
+set protocols bgp peer-group evpn remote-as 43100
 set protocols bgp peer-group evpn address-family l2vpn-evpn nexthop-self
 set protocols bgp peer-group evpn address-family l2vpn-evpn route-reflector-client
 
 
 set system host-name DCL1
 
-set interfaces vxlan vxlan101 source-address 10.0.1.208
+set interfaces vxlan vxlan101 source-address 10.0.1.211
 set interfaces vxlan vxlan101 vni 101
+set interfaces vxlan vxlan101 port 4789
 set interfaces vxlan vxlan101 mtu 1500
 
-set interfaces bridge br101 address 10.2.1.1/22
+set interfaces bridge br101 address 10.2.0.1/22
 set interfaces bridge br101 description 'client x1'
 set interfaces bridge br101 member interface eth1
 set interfaces bridge br101 member interface vxlan101
-
-
 
 commit
 save
@@ -326,9 +328,9 @@ reboot
 
 configure
 set interfaces bridge br120 member interface eth2.20
-set interfaces bridge br120 member interface vxlan102
+set interfaces bridge br120 member interface vxlan120
 set interfaces bridge br130 member interface eth2.30
-set interfaces bridge br130 member interface vxlan103
+set interfaces bridge br130 member interface vxlan130
 set interfaces dummy dum0 address '10.0.1.211/32'
 set interfaces ethernet eth0 address '10.0.0.66/26'
 set interfaces ethernet eth2 vif 20
@@ -347,19 +349,23 @@ set system host-name DCP2
 set protocols bgp system-as 43100
 set protocols bgp address-family l2vpn-evpn advertise-all-vni
 set protocols bgp parameters router-id 10.0.1.211
+set protocols bgp neighbor 10.0.1.212 peer-group evpn
 set protocols bgp neighbor 10.0.1.208 peer-group evpn
+
+set protocols bgp neighbor 10.0.1.212 update-source dum0
+set protocols bgp neighbor 10.0.1.208 update-source dum0
 set protocols bgp peer-group evpn update-source dum0
-set protocols bgp peer-group evpn remote-as 102
+set protocols bgp peer-group evpn remote-as 43100
 set protocols bgp peer-group evpn address-family l2vpn-evpn nexthop-self
 
 
-
-set interfaces vxlan vxlan101 source-address 10.0.1.211
+set interfaces vxlan vxlan101 source-address 10.0.1.212
 set interfaces vxlan vxlan101 vni 101
+set interfaces vxlan vxlan101 port 4789
 set interfaces vxlan vxlan101 mtu 1500
 
-set interfaces bridge br101 address 10.2.2.1/22
-set interfaces bridge br101 description 'client x2'
+set interfaces bridge br101 address 10.2.0.2/22
+set interfaces bridge br101 description 'client x1'
 set interfaces bridge br101 member interface eth1
 set interfaces bridge br101 member interface vxlan101
 
@@ -423,7 +429,7 @@ ip ospf 1 area 0
 
 ```
 # Aveiro DC
-## VyOS DC.AC1
+## VyOS DC.A1
 ```
 sudo cp /opt/vyatta/etc/config.boot.default /config/config.boot
 reboot
@@ -440,18 +446,27 @@ set protocols bgp system-as 43100
 set protocols bgp address-family l2vpn-evpn advertise-all-vni
 set protocols bgp parameters router-id 10.0.1.212
 set protocols bgp neighbor 10.0.1.208 peer-group evpn
+set protocols bgp neighbor 10.0.1.211 peer-group evpn
+set protocols bgp neighbor 10.0.1.211 update-source dum0
+set protocols bgp neighbor 10.0.1.208 update-source dum0
+
 set protocols bgp peer-group evpn update-source dum0
-set protocols bgp peer-group evpn remote-as 102
+set protocols bgp peer-group evpn remote-as 43100
 set protocols bgp peer-group evpn address-family l2vpn-evpn nexthop-self
 
-set interfaces vxlan vxlan101 source-address 10.0.1.212
+set interfaces vxlan vxlan101 source-address 10.0.1.211
 set interfaces vxlan vxlan101 vni 101
+set interfaces vxlan vxlan101 port 4789
 set interfaces vxlan vxlan101 mtu 1500
 
-set interfaces bridge br101 address 10.2.3.1/22
-set interfaces bridge br101 description 'client x3'
+set interfaces bridge br101 address 10.2.0.3/22
+set interfaces bridge br101 description 'client x1'
 set interfaces bridge br101 member interface eth1
 set interfaces bridge br101 member interface vxlan101
+
+
+
+
 
 commit
 save
